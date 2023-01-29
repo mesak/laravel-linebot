@@ -1,0 +1,35 @@
+{
+  "name": "mesak/laravel-linebot",
+  "description": "build a Laravel api response package",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "linebot",
+    "line"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Mesak\\LineBot\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Mesak\\LineBot\\LineBotServiceProvider"
+      ]
+    }
+  },
+  "authors": [
+    {
+      "name": "Mesak Chuang",
+      "email": "mesakey@gmail.com",
+      "homepage": "https://github.com/mesak"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": false,
+  "require": {
+    "php": "^8.0",
+    "linecorp/line-bot-sdk": "^7.5" 
+  }
+}
