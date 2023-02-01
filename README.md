@@ -14,7 +14,7 @@ composer require mesak/laravel-linebot
 將設定檔複製到專案中
 
 ```bash
-php artisan vendor:publish --tag=mesak-linebot --force
+php artisan vendor:publish --tag=mesak-linebot.config --force
 ```
 
 修改 `config/linebot.php` 中的設定
@@ -27,6 +27,10 @@ php artisan vendor:publish --tag=mesak-linebot --force
 ## 使用
 
 利用標準檔案  `Mesak\LineBot\Listener\SimpleListener` 來建立 LINEBOT 的 Listener
+
+```bash
+php artisan vendor:publish --tag=mesak-linebot.listener --force
+```
 
 `LineBotListener.php`
 

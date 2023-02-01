@@ -52,6 +52,7 @@ class EntityBot extends LINEBot implements BotContract
     $this->channelSecret = Arr::get($this->config, 'line.client_secret', null);
 
     // self::$eventRequestParser = config('line.event_parser' , EventRequestParser::class );
+
     self::$eventRequestParser = config('line.event_parser', 'Mesak\LineBot\Events\EventRequestParser');
 
     parent::__construct($this->httpClient, ['channelSecret' => $this->channelSecret]);
@@ -76,7 +77,9 @@ class EntityBot extends LINEBot implements BotContract
       $expiresIn = Arr::get($response, 'expires_in', null);
 
       if (is_null($channelToken) || is_null($expiresIn)) {
+
         throw new \Exception('LINE Channel Token is not set.');
+
       }
 
       $expiresAt = Carbon::now()->addSeconds($expiresIn - 43200); //2592000

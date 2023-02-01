@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Mesak\LineBot\Contracts\Bot as BotContract;
 use Mesak\LineBot\EntityBot;
+
 class LineBotServiceProvider extends ServiceProvider
 {
   /**
@@ -17,12 +18,12 @@ class LineBotServiceProvider extends ServiceProvider
   {
     if ($this->app->runningInConsole()) {
       $this->publishes([
-        __DIR__ . '/../config/line.php' => config_path('line.php'),
-      ], 'line');
+        __DIR__ . '/../config/linebot.php' => config_path('linebot.php'),
+      ], 'mesak-linebot.config');
       
-      // $this->publishes([
-      //   __DIR__ . '/Listener/SimpleListener.php' => config_path('line.php'),
-      // ], 'line-listener');
+      $this->publishes([
+        __DIR__ . '/Listener/SimpleListener.php' => config_path('line.php'),
+      ],'mesak-linebot.listener');
     }
     $this->registerBotEvent();
   }
@@ -35,7 +36,7 @@ class LineBotServiceProvider extends ServiceProvider
   public function register()
   {
     //註冊 config 檔案
-    $this->mergeConfigFrom(__DIR__ . '/../config/line.php', 'line');
+    $this->mergeConfigFrom(__DIR__ . '/../config/linebot.php', 'line');
     $this->registerSingleton();
   }
 

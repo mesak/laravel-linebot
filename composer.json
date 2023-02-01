@@ -30,6 +30,6 @@
   "prefer-stable": false,
   "require": {
     "php": "^8.0",
-    "linecorp/line-bot-sdk": "^7.5" 
+    "linecorp/line-bot-sdk": "^7" 
   }
 }

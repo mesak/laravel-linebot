@@ -9,16 +9,16 @@ use Mesak\LineBot\Actions\RawAction;
 
 class BotEventSubscribe
 {
-    protected $bot;
 
-    public function __construct(BotContract $bot)
-    {
-
-        $this->bot = $bot;
-    }
+    // public function __construct(BotContract $bot)
+    // {
+    //     $this->bot = $bot;
+    // }
 
     public function handle(BaseAction $action): void
     {
+        $bot = app(BotContract::class);
+
         $type = $action->getType();
 
         if (is_null($type)) {
@@ -34,7 +34,7 @@ class BotEventSubscribe
             throw new \Exception('LINE Bot send target is not set');
         }
 
-        $this->bot->execute($type, $target, $action->getMessage());
+        $bot->execute($type, $target, $action->getMessage());
     }
 
     public function subscribe(): array

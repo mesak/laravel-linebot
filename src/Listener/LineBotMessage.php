@@ -3,7 +3,7 @@
 namespace Mesak\LineBot\Listener;
 
 // @see \LINE\LINEBot\Event\BaseEvent;
-class SimpleListener
+class LineBotMessage
 {
 
     /*

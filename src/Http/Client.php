@@ -4,6 +4,8 @@ namespace Mesak\LineBot\Http;
 
 use LINE\LINEBot\HTTPClient as ContractsHttpClient;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient as HttpClient;
+use Illuminate\Support\Facades\Http;
+use Mesak\LineBot\Exception\RequestException;
 
 /**
  * Class CurlHTTPClient.
@@ -61,7 +63,7 @@ class Client implements ContractsHttpClient
    */
   public function put($url, array $data, array $headers = null)
   {
-    return $this->handleResponse($this->client->put($url, $data, $headers));   
+    return $this->handleResponse($this->client->put($url, $data, $headers));
   }
 
   /**
@@ -105,14 +107,18 @@ class Client implements ContractsHttpClient
    * Get the access token response for the given code.
    *
    * @param  string  $code
-   * @return array
+   * @return array|RequestException
    */
-  public static function getAccessToken(String $client_id, String $client_secret)
+  public static function getAccessToken(String $client_id, String $client_secret): array|RequestException
   {
-    return \Illuminate\Support\Facades\Http::asForm()->post( \LINE\LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/oauth/accessToken', [
+    return tap( Http::asForm()->post(\LINE\LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/oauth/accessToken', [
       'grant_type' => 'client_credentials',
       'client_id' => $client_id,
       'client_secret' => $client_secret
-    ])->throw()->json();
+    ]) , function ($response) {
+      if( $response->failed() ) {
+        throw new RequestException($response);
+      }
+    })->json();
   }
 }

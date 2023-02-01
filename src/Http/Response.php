@@ -3,6 +3,7 @@
 namespace Mesak\LineBot\Http;
 
 use Illuminate\Http\Client\Response as BaseResponse;
+use Mesak\LineBot\Exception\RequestException;
 
 class Response extends BaseResponse
 {
@@ -12,7 +13,7 @@ class Response extends BaseResponse
    *
    * @return int
    */
-  public function status()
+  public function status(): int
   {
     return (int) $this->response->getHTTPStatus();
   }
@@ -22,10 +23,10 @@ class Response extends BaseResponse
    *
    * @return \Illuminate\Http\Client\RequestException|null
    */
-  public function toException()
+  public function toException(): ?RequestException
   {
     if ($this->failed()) {
-      return new \Exception($this->json('message'));
+      return new RequestException($this);
     }
   }
   /**
@@ -33,7 +34,7 @@ class Response extends BaseResponse
    *
    * @return string
    */
-  public function body()
+  public function body(): string
   {
     return (string) $this->response->getRawBody();
   }
