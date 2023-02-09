@@ -22,7 +22,7 @@ class LineBotServiceProvider extends ServiceProvider
       ], 'mesak-linebot.config');
       
       $this->publishes([
-        __DIR__ . '/Listener/SimpleListener.php' => config_path('line.php'),
+        __DIR__ . '/Listener/LineBotMessage.php' => base_path('app/Listeners/LineBotListeners.php'),
       ],'mesak-linebot.listener');
     }
     $this->registerBotEvent();
@@ -36,7 +36,7 @@ class LineBotServiceProvider extends ServiceProvider
   public function register()
   {
     //註冊 config 檔案
-    $this->mergeConfigFrom(__DIR__ . '/../config/linebot.php', 'line');
+    $this->mergeConfigFrom(__DIR__ . '/../config/linebot.php', 'linebot');
     $this->registerSingleton();
   }
 
@@ -48,7 +48,7 @@ class LineBotServiceProvider extends ServiceProvider
   public function registerSingleton()
   {
     $this->app->singleton(BotContract::class, function ($app) {
-      return tap(new EntityBot(config('line') , $app['events']) ,function($bot){
+      return tap(new EntityBot(config('linebot') , $app['events']) ,function($bot){
         $bot->boot();
       });
     });

@@ -20,7 +20,7 @@ abstract class BaseAction
 
   protected $message;
 
-  public function setEvent(BaseEvent $event)
+  public function setEvent(BaseEvent $event): void
   {
     $this->event = $event;
 
@@ -30,18 +30,19 @@ abstract class BaseAction
 
   }
 
-  public function getType()
+  public function getType(): string
   {
     return $this->type;
   }
-  
-  public function getTarget()
+
+  public function getTarget(): string
   {
     return $this->target;
   }
   
   public function getMessage(): MessageBuilder
   {
+    
     if( is_string($this->message) )
     {
       return new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($this->message);

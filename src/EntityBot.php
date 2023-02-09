@@ -50,14 +50,17 @@ class EntityBot extends LINEBot implements BotContract
     $this->channelId = Arr::get($this->config, 'line.client_id', null);
 
     $this->channelSecret = Arr::get($this->config, 'line.client_secret', null);
-
-    // self::$eventRequestParser = config('line.event_parser' , EventRequestParser::class );
-
-    self::$eventRequestParser = config('line.event_parser', 'Mesak\LineBot\Events\EventRequestParser');
+    
+    self::$eventRequestParser = Arr::get($this->config, 'line.event_parser', 'Mesak\LineBot\Events\EventRequestParser');
 
     parent::__construct($this->httpClient, ['channelSecret' => $this->channelSecret]);
   }
 
+  /**
+   * boot function
+   *
+   * @return void
+   */
   public function boot(): void
   {
 
@@ -91,12 +94,24 @@ class EntityBot extends LINEBot implements BotContract
     $this->httpClient->setToken($channelToken);
   }
 
+  /**
+   * initzalize event
+   *
+   * @return void
+   */
   protected function initEvent(): void
   {
 
     Event::listen('Mesak\LineBot\Events\MessageEvent', [\Mesak\LineBot\Facades\Listener::class, 'handle']);
+
   }
 
+  /**
+   * Handle an incoming request.
+   *
+   * @param Request $request
+   * @return void
+   */
   public function handle(Request $request): void
   {
     /* 註冊事件 */
@@ -111,20 +126,33 @@ class EntityBot extends LINEBot implements BotContract
     foreach ($this->parseEventRequest($body, $signature) as $event) {
 
       $this->events->dispatch($event);
+
     };
   }
 
+  /**
+   * Parse event request.
+   *
+   * @param string $body
+   * @param string $signature
+   * @param bool $eventOnly
+   * @return array
+   * @throws InvalidSignatureException
+   * @throws InvalidEventRequestException
+   */
   public function parseEventRequest($body, $signature, $eventOnly = true): array
   {
 
     if (trim($signature) === '') {
 
       throw new InvalidSignatureException('Request does not contain signature');
+
     }
 
     if (!SignatureValidator::validateSignature($body, $this->channelSecret, $signature)) {
 
       throw new InvalidSignatureException('Invalid signature has given');
+
     }
 
     $parseResult = json_decode($body, true);
@@ -132,16 +160,25 @@ class EntityBot extends LINEBot implements BotContract
     if (is_null($parseResult)) {
 
       throw new InvalidEventRequestException('Invalid request body has given');
+
     }
 
     if (!isset($parseResult['events'])) {
 
       throw new InvalidEventRequestException('Request does not contain events property');
+
     }
     // return parent::parseEventRequest($body, $signature, false);
     return self::$eventRequestParser::parseEventRequest($parseResult, $eventOnly);
   }
 
+  /**
+   * Send message to user
+   *
+   * @param String $target
+   * @param MessageBuilder $message
+   * @return void
+   */
   public function execute(String $type, String $target, MessageBuilder $message): void
   {
 
@@ -154,24 +191,9 @@ class EntityBot extends LINEBot implements BotContract
         // echo 'Succeeded!';
 
       }
+
     }
 
   }
-  /**
-   * change base endpoint webhook url for LINE Messaging API
-   *
-   * @return void
-   */
-  public function updateHook(): ?array
-  {
 
-    \Illuminate\Support\Facades\URL::forceScheme('https');
-
-    $webHookUrl = url('hook/line');
-
-    if ($this->setWebhookEndpoint($webHookUrl)->throw()->successful()) {
-
-      return $this->getWebhookEndpointInfo()->throw()->json();
-    }
-  }
 }

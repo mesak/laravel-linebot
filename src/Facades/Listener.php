@@ -20,7 +20,7 @@ class Listener extends Facade implements ShouldQueue
      */
     protected static function getFacadeAccessor()
     {
-        return config('line.listener', \Mesak\LineBot\Listener\SimpleListener::class);
+        return config('linebot.listener', \Mesak\LineBot\Listener\LineBotMessage::class);
     }
     public function __invoke(MessageEvent $event)
     {
@@ -41,7 +41,7 @@ class Listener extends Facade implements ShouldQueue
                 $action->setEvent($lineEvent);
                 
                 event($action);
-                // Event::dispatch($action);
+                
             });
         }
     }

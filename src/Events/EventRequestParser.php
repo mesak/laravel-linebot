@@ -2,6 +2,7 @@
 
 namespace Mesak\LineBot\Events;
 
+use LINE\LINEBot\Event\BaseEvent;
 use LINE\LINEBot\Event\UnknownEvent;
 use LINE\LINEBot\Event\MessageEvent\UnknownMessage;
 
@@ -70,7 +71,7 @@ class EventRequestParser
    * @param array $eventData
    * @return MessageEvent
    */
-  private static function parseMessageEvent($eventData)
+  private static function parseMessageEvent($eventData): BaseEvent
   {
     $messageType = $eventData['message']['type'];
 
