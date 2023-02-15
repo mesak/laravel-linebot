@@ -22,7 +22,7 @@ class LineBotServiceProvider extends ServiceProvider
       ], 'mesak-linebot.config');
       
       $this->publishes([
-        __DIR__ . '/Listener/LineBotMessage.php' => base_path('app/Listeners/LineBotListeners.php'),
+        __DIR__ . '/Listener/LineBotListener.php' => base_path('app/Listeners/LineBotListener.php'),
       ],'mesak-linebot.listener');
     }
     $this->registerBotEvent();
@@ -61,7 +61,6 @@ class LineBotServiceProvider extends ServiceProvider
    */
   public function registerBotEvent(){
     //subscribe
-    // $this->app->make(BotContract::class)->subscribe();
     Event::subscribe(Listener\BotEventSubscribe::class);
   }
 }

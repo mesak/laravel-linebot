@@ -6,6 +6,7 @@ namespace App\Listeners;
 use LINE\LINEBot\Event\FollowEvent;
 use LINE\LINEBot\Event\MessageEvent;
 use Facades\Mesak\LineBot\Contracts\Bot as LineBot;
+
 class LineBotListener
 {
 
