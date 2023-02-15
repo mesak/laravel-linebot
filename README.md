@@ -59,6 +59,17 @@ LINE_CLIENT_ID=xxxxxxxx
 LINE_CLIENT_SECRET=xxxxxxxx
 ```
 
+在 route 中加入，對應 line webhook 的 post 事件
+
+```php
+use Illuminate\Http\Request;
+
+Route::post('/line', function (Request $request) {
+    return \Facades\Mesak\LineBot\Contracts\Bot::handle($request);
+});
+```
+
+
 ### Event 事件
 
 套件利用處理 Request 把內容塞入 `Mesak\LineBot\Events\MessageEvent` 中，利用 BotEventSubscribe 發起對話事件，最後回傳 `Mesak\LineBot\Actions\BaseAction` 的事件來處理需要的回應
